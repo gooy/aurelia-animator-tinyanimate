@@ -1,0 +1,144 @@
+<template>
+  <section class="page au-animate section-sidemenu container">
+    
+    <aside>
+
+      <nav class="sidemenu">
+        <ul class="list-group">
+          <li class="list-group-item"> <a href="#/home/install" smooth-scroll>Install</a></li>
+          <li class="list-group-item"> <a href="#/home/view-enter-leave" smooth-scroll>View enter/leave</a></li>
+          <li class="list-group-item"> <a href="#/home/element-animations" smooth-scroll>Element animations</a></li>
+          <li class="list-group-item"> <a href="#/home/effects" smooth-scroll>Effects</a></li>
+          <li class="list-group-item"> <a href="#/home/custom-effects" smooth-scroll>Custom Effects</a></li>
+          <li class="list-group-item"> <a href="#/home/sequences" smooth-scroll>Sequences</a></li>
+        </ul>
+      </nav>
+
+    </aside>
+    <article>
+
+<markdown>
+
+<h1 id="/home/install">TinyAnimate Animator</h1>
+
+An implementation of the abstract Animator interface from templating which enables animations using [TinyAnimate](https://github.com/branneman/TinyAnimate).
+
+Install it into your project.
+
+```javascript
+jspm install gooy/aurelia-animator-tinyanimate
+```
+
+Register it as a plugin with aurelia.
+
+```javascript
+aurelia.use.plugin('gooy/aurelia-animator-tinyanimate')
+```
+
+Options can be specified while registering the plugin.  
+The options specified here are the defaults that will be used for animations that do not specifically specify these options.
+
+```javascript
+aurelia.use.plugin('gooy/aurelia-animator-tinyanimate',instance=>{
+  instance.options.duration = 500;
+  instance.options.easing = "ease-in";
+
+  instance.enterAnimation = "fadeIn";
+  instance.leaveAnimation = "fadeOut";
+})
+```
+
+<h2 id="/home/view-enter-leave">View enter/leave animations</h2>
+
+If the firstChild of a ViewSlot has the `au-animate` class Aurelia will automatically execute the `enter` and `leave` animations on that element.
+for example:
+
+```markup
+<template>
+  <section class="au-animate">
+    ...
+  </section>
+</template>
+```
+
+By default the enter animation will use the `fadeIn` effect and the leave animation will use the `fadeOut` effect.  
+The defaults can be changed during plugin registration.
+
+Elements can specify an effect an extra options on a use-by-use basis by specifying
+the `animation-enter` and/or `animation-leave` attributes.
+
+```markup
+<section class="au-animate" animation-enter="fadeIn" animation-leave="fadeOut"></section>
+```
+
+Options can also be specified using a json object after the effectName.
+
+```markup
+<section class="au-animate" animation-enter="fadeIn;{duration:1000,easing:ease-out}" ></section>
+```
+
+Instead of using an effectName, it is also possible to specify properties that should be animated as a json object.
+
+```markup
+<section class="au-animate" animation-enter="{opacity:0};{duration:1000,easing:ease-out}" ></section>
+```
+
+<h2 id="/home/element-animations">Element animations</h2>
+
+To use enter/leave animations on any element the animator has to be invoked manually.  
+To do this inject it into your VM an call the enter/leave methods.
+
+```javascript
+import {TinyAnimator} from "gooy/aurelia-animator-tinyanimate";
+
+export class MyCustomElement{
+
+  static inject = [Element,TinyAnimator];
+  constructor(element,animator) {
+    this.element = element;
+    this.animator = animator;
+  }
+
+  attached(){
+    //run enter animation on the element
+    this.animator.enter(this.element);
+
+    //run leave animation on the element
+    this.animator.leave(this.element);
+
+    //run an effect on the element
+    this.animator.animate(this.element,"callout.bounce");
+  }
+
+}
+```
+  
+The sidemenu on this page has links that enable smooth scrolling.
+The [aurelia-smooth-scroll](https://github.com/gooy/) plugin makes use of this animator to scroll the body smoothly to the target location.
+
+<h2 id="/home/effects">Effects</h2>
+  
+### Default effects
+  
+- fadeIn
+- fadeOut
+  
+<h2 id="/home/custom-effects">Registering custom effects</h2>
+
+Custom effects can be registered by using the `registerEffect` method.
+
+```javascript
+animator.registerEffect("my_cool_effect",)
+```
+
+<h2 id="/home/sequences">Running sequences</h2>
+
+```javascript
+animator.runSequence([)
+```
+
+</markdown>
+
+    </article>
+  </section>
+</template>
